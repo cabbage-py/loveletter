@@ -2,6 +2,7 @@ package loveletter;
 import java.util.Random;
 import java.io.PrintStream;
 import agents.RandomAgent;
+import agents.TestAgent;
 
 /**
  * A class for running a single game of LoveLetter.
@@ -85,17 +86,50 @@ public class LoveLetter {
         }
     }
 
-    /**
-     * This main method is provided to run a simple test game with provided agents.
-     * The agent implementations should be in the default package.
-     * */
-    public static void main(String[] args){
-        Agent[] agents = {new agents.RandomAgent(),new agents.RandomAgent(), new agents.BorkedAgent(), new agents.BorkedAgent()};
+    private static void oneGame(){
+        Agent[] agents = {new agents.TestAgent(),new agents.RandomAgent(), new agents.RandomAgent(), new agents.RandomAgent()};
         LoveLetter env = new LoveLetter();
         StringBuffer log = new StringBuffer("A simple game for four random agents:\n");
         int[] results = env.playGame(agents);
         env.ps.print("The final scores are:\n");
         for(int i= 0; i<agents.length; i++)
             env.ps.print("\t Agent "+i+", \""+agents[i]+"\":\t "+results[i]+"\n");
+    }
+
+    private static void multipleGames(int count) {
+        int countTest = 0;
+        int countRand1 = 0;
+        int countRand2 = 0;
+        int countRand3 = 0;
+
+
+        for (int j = 0; j < count; j++) {
+            Agent[] agents = {new agents.TestAgent(), new agents.RandomAgent(), new agents.RandomAgent(), new agents.RandomAgent()};
+            LoveLetter env = new LoveLetter();
+            StringBuffer log = new StringBuffer("A simple game for four random agents:\n");
+            int[] results = env.playGame(agents);
+            env.ps.print("The final scores are:\n");
+            for (int i = 0; i < agents.length; i++)
+                env.ps.print("\t Agent " + i + ", \"" + agents[i] + "\":\t " + results[i] + "\n");
+            if(results[0] == 4) countTest++;
+            else if(results[1] == 4) countRand1++;
+            else if(results[2] == 4) countRand2++;
+            else if(results[3] == 4) countRand3++;
+        }
+        System.out.println("Test agent won " + countTest + "out of " + count + " games, Winrate = " + (double)countTest/count*100 +"%" );
+        System.out.println("Random 1 agent won " + countRand1 + "out of " + count + " games, Winrate = " + (double)countRand1/count*100 +"%" );
+        System.out.println("Random 2 agent won " + countRand2 + "out of " + count + " games, Winrate = " + (double)countRand2/count*100 +"%" );
+        System.out.println("Random 3 agent won " + countRand3 + "out of " + count + " games, Winrate = " + (double)countRand3/count*100 +"%" );
+
+    }
+
+
+    /**
+     * This main method is provided to run a simple test game with provided agents.
+     * The agent implementations should be in the default package.
+     * */
+    public static void main(String[] args){
+        //oneGame();
+        multipleGames(1000);
     }
 }

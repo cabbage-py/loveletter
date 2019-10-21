@@ -2,7 +2,7 @@ package loveletter;
 import java.util.Random;
 import java.io.PrintStream;
 import agents.RandomAgent;
-import agents.TestAgent;
+import agents.BasicAgent;
 
 /**
  * A class for running a single game of LoveLetter.
@@ -86,8 +86,7 @@ public class LoveLetter {
         }
     }
 
-    private static void oneGame(){
-        Agent[] agents = {new agents.TestAgent(),new agents.RandomAgent(), new agents.RandomAgent(), new agents.RandomAgent()};
+    private static void oneGame(Agent[] agents){
         LoveLetter env = new LoveLetter();
         StringBuffer log = new StringBuffer("A simple game for four random agents:\n");
         int[] results = env.playGame(agents);
@@ -96,31 +95,28 @@ public class LoveLetter {
             env.ps.print("\t Agent "+i+", \""+agents[i]+"\":\t "+results[i]+"\n");
     }
 
-    private static void multipleGames(int count) {
-        int countTest = 0;
-        int countRand1 = 0;
-        int countRand2 = 0;
-        int countRand3 = 0;
-
-
+    private static void multipleGames(Agent[] agents, int count) {
+        int count0 = 0;
+        int count1 = 0;
+        int count2 = 0;
+        int count3 = 0;
         for (int j = 0; j < count; j++) {
-            Agent[] agents = {new agents.TestAgent(), new agents.RandomAgent(), new agents.RandomAgent(), new agents.RandomAgent()};
             LoveLetter env = new LoveLetter();
             StringBuffer log = new StringBuffer("A simple game for four random agents:\n");
             int[] results = env.playGame(agents);
             env.ps.print("The final scores are:\n");
             for (int i = 0; i < agents.length; i++)
                 env.ps.print("\t Agent " + i + ", \"" + agents[i] + "\":\t " + results[i] + "\n");
-            if(results[0] == 4) countTest++;
-            else if(results[1] == 4) countRand1++;
-            else if(results[2] == 4) countRand2++;
-            else if(results[3] == 4) countRand3++;
+            if(results[0] == 4) count0++;
+            else if(results[1] == 4) count1++;
+            else if(results[2] == 4) count2++;
+            else if(results[3] == 4) count3++;
         }
-        System.out.println("Test agent won " + countTest + "out of " + count + " games, Winrate = " + (double)countTest/count*100 +"%" );
-        System.out.println("Random 1 agent won " + countRand1 + "out of " + count + " games, Winrate = " + (double)countRand1/count*100 +"%" );
-        System.out.println("Random 2 agent won " + countRand2 + "out of " + count + " games, Winrate = " + (double)countRand2/count*100 +"%" );
-        System.out.println("Random 3 agent won " + countRand3 + "out of " + count + " games, Winrate = " + (double)countRand3/count*100 +"%" );
+        int[] scores = new int[]{count0, count1, count2, count3};
 
+        for (int i = 0; i < 4; i++){
+            System.out.println(agents[i] + " " + i + " won " + scores[i] + " out of " + count + " games, Winrate = " + (double)scores[i]/count*100 +"%" );
+        }
     }
 
 
@@ -130,6 +126,7 @@ public class LoveLetter {
      * */
     public static void main(String[] args){
         //oneGame();
-        multipleGames(1000);
+        Agent[] agents = {new agents.BasicAgent(), new agents.RandomAgent(), new agents.RandomAgent(), new agents.RandomAgent()};
+        multipleGames(agents, 2000);
     }
 }
